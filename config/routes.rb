@@ -1,4 +1,3 @@
 Rails.application.routes.draw do
-
-  resources :gosts
+  resources :gosts, only: [:show, :update]
 end
