@@ -1,0 +1,17 @@
+<h1 class="text-center">show</h1>
+<div class="row text-center">
+  <div class="col-md-6 col-md-offset-3">
+    <%= form_for @gost do |f| %>
+      <%= f.label :str, "Message M" %>
+      <%= f.text_field :str, class: "form-control" %><br/>
+
+      <% if @gost.hash_value.present? %>
+        <%= f.label :hash_value, "Hash value" %>
+        <%= f.text_area :hash_value, value: @gost.hash_value, readonly: :true,
+          class: "form-control" %><br/>
+      <% end %>
+
+      <%= f.submit "caculate", class: "btn btn-primary" %>
+    <% end %>
+  </div>
+</div>
