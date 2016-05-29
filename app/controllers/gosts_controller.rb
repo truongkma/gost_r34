@@ -4,6 +4,10 @@ class GostsController < ApplicationController
   def update
     if @gost.update_attributes gost_params
       redirect_to root_path
+      flash[:success] = "Caculate signature success"
+    else
+      redirect_to root_path
+      flash[:danger] = "Caculate signature faile"
     end
   end
 

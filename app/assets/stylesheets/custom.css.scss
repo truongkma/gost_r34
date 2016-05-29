@@ -1,2 +1,53 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
+
+* {
+  -ms-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+html,
+body {
+  width: 100%;
+  height: 100%;
+  background: image-url('sativa.png') repeat fixed;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 200;
+  margin-top: 20px;
+  color: green;
+}
+.show {
+  position: relative;
+  top: 100%;
+  width: 500px;
+  display: table;
+  margin: -150px auto 0 auto;
+  background: #fff;
+  border-radius: 4px;
+}
+.legend {
+  position: relative;
+  width: 49%;
+  display: block;
+  background: #FF7052;
+  padding: 15px;
+  color: #fff;
+  font-size: 20px;
+}
+.legend:after {
+  content: "";
+  background: image-url('multy-user.png');
+  background-size: 100px 100px;
+  background-repeat: no-repeat;
+  background-position: 152px -16px;
+  opacity: 0.06;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+}
