@@ -14,8 +14,8 @@
 ActiveRecord::Schema.define(version: 20160528064109) do
 
   create_table "gosts", force: :cascade do |t|
-    t.string   "str"
-    t.string   "hash_value"
+    t.string   "message"
+    t.integer  "size"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
