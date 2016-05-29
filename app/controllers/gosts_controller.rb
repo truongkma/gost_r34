@@ -1,11 +1,9 @@
 class GostsController < ApplicationController
-  include GostsHelper
-  require "securerandom"
   before_action :load_gost, only: [:show, :update]
 
   def update
     if @gost.update_attributes gost_params
-      redirect_to gost_path
+      redirect_to root_path
     end
   end
 
