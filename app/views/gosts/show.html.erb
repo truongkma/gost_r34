@@ -1,15 +1,28 @@
-<h1 class="text-center">show</h1>
+<h1 class="text-center">Signature Digital GOST R34.10-2012</h1>
 <div class="row text-center">
   <div class="col-md-6 col-md-offset-3">
     <%= form_for @gost do |f| %>
-      <%= f.label :str, "Message M" %>
-      <%= f.text_field :str, class: "form-control" %><br/>
+      <%= f.label :message, "Message M" %>
+      <%= f.text_field :message, class: "form-control" %><br/>
 
-      <% if @gost.hash_value.present? %>
-        <%= f.label :hash_value, "Hash value" %>
-        <%= f.text_area :hash_value, value: @gost.hash_value, readonly: :true,
+      <%= f.label :size, "Digest size" %>
+      <%= f.number_field :size, class: "form-control" %>
+
+      <% if @digest.present? %>
+        <%= f.label :digest, "Hash value" %>
+        <%= f.text_area :digest, value: @digest, readonly: :true,
           class: "form-control" %><br/>
       <% end %>
+
+      <% if @signature.present? %>
+        <%= f.label :signature, "Signature" %>
+        <%= f.text_area :signature, value: encode_hex(@signature),
+          readonly: :true, class: "form-control" %><br/>
+      <% end %>
+
+      <%= f.label :verify, "Verify Signature" %>
+      <%= f.text_field :verify, value: @verify, readonly: :true,
+        class: "form-control" %><br/>
 
       <%= f.submit "caculate", class: "btn btn-primary" %>
     <% end %>

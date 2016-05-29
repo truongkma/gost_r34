@@ -1,8 +1,8 @@
 class CreateGosts < ActiveRecord::Migration
   def change
     create_table :gosts do |t|
-      t.string :str
-      t.string :hash_value
+      t.string :message
+      t.integer :size
 
       t.timestamps null: false
     end
