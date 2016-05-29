@@ -58,7 +58,7 @@ class Gost341012
     return "false" if r <= 0 or r >= @q or s <= 0 or s >= @q
     e = digest.to_i(16) % @q
     e = 1 if e == 0
-    v = mod_inv(e, @q)
+    v = invert(e, @q)
     z1 = s * v % @q
     z2 = @q - r * v % @q
     p = [@x, @y]
@@ -67,7 +67,7 @@ class Gost341012
     q1x, q1y = exp(z2, q)
     lm = q1x - p1x
     lm += @p if lm < 0
-    lm = mod_inv(lm, @p)
+    lm = invert(lm, @p)
     z1 = q1y - p1y
     lm = lm * z1 % @p
     xc = lm * lm % @p

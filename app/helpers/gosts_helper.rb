@@ -1,11 +1,6 @@
 module GostsHelper
   BLOCKSIZE = 64
 
-  private_key = "0ba6048aadae241ba40936d47756d7c93091a0e8514669700ee7508e508b102072e8123b2200a0563322dad2827e2714a2636b7bfd18aadfc62967821fa18dd4"
-  public_x = "115dc5bc96760c7b48598d8ab9e740d4c4a85a65be33c1815b5c320c854621dd5a515856d13314af69bc5b924c8b4ddff75c45415c1d9dd9dd33612cd530efe1"
-  public_y = "37c7c90cd40b0f5621dc3ac1b751cfa0e2634fa0503b3d52639f5d7fb72afd61ea199441d943ffe7f0c70a2759a3cdb84c114e1f9339fdf27f35eca93677beec"
-
-
   Sbox = [
     252, 238, 221, 17, 207, 110, 49, 22, 251, 196, 250, 218, 35, 197, 4, 77,
     233, 119, 240, 219, 147, 46, 153, 186, 23, 54, 241, 187, 20, 205, 95, 193,
@@ -129,20 +124,17 @@ module GostsHelper
   end
 
   def addEC a, p, p1, p2
-    x1 = p1[0]
-    x2 = p2[0]
-    y1 = p1[1]
-    y2 = p2[1]
+    x1, x2, y1, y2 = p1[0], p2[0], p1[1], p2[1]
     zero = [0, 0]
     return p2 if p1 == zero
     return p1 if p2 == zero
     if x1 == x2
-      l = (3 * x1 * x1 + a) * mod_inv(2 * y1, p) % p
+      lamda = (3 * x1 * x1 + a) * invert(2 * y1, p) % p
     else
-      l = (y2 - y1) * mod_inv(x2 - x1, p) % p
+      lamda = (y2 - y1) * invert(x2 - x1, p) % p
     end
-    x = (l * l - x1 - x2) % p
-    y = (l * (x1 - x) - y1) % p
+    x = (lamda * lamda - x1 - x2) % p
+    y = (lamda * (x1 - x) - y1) % p
     q = [x , y]
     return q
   end
@@ -158,8 +150,8 @@ module GostsHelper
     return r
   end
 
-  def mod_inv a, n
-    return n - mod_inv(-a, n) if a < 0
+  def invert a, n
+    return n - invert(-a, n) if a < 0
     t, t1 = 0, 1
     r, r1 = n, a
     while r1 != 0
