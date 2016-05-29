@@ -3,7 +3,7 @@ class GostsController < ApplicationController
 
   def update
     if @gost.update_attributes gost_params
-      redirect_to gost_path
+      redirect_to root_path
     end
   end
 
