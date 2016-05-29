@@ -1,6 +1,4 @@
 class GostsController < ApplicationController
-  include GostsHelper
-  require "securerandom"
   before_action :load_gost, only: [:show, :update]
 
   def update
