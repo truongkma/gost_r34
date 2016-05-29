@@ -1,16 +1,17 @@
-<h1 class="text-center">Signature Digital GOST R34.10-2012</h1>
-<div class="row text-center">
+<h2 class="text-center">Signature Digital GOST R34.10-2012</h2>
+<div class="row">
   <div class="col-md-6 col-md-offset-3">
     <%= form_for @gost do |f| %>
       <%= f.label :message, "Message M" %>
-      <%= f.text_field :message, class: "form-control" %><br/>
+      <%= f.text_field :message, class: "form-control", required: true,
+        autocomplete: :off %><br/>
 
-      <%= f.label :size, "Digest size" %>
-      <%= f.number_field :size, class: "form-control" %>
+      <%= f.label :size, "Digest size: " %>
+      <%= f.select :size, [256, 512].collect{|n| n}, class: "selectpicker" %><br/>
 
       <% if @digest.present? %>
         <%= f.label :digest, "Hash value" %>
-        <%= f.text_area :digest, value: @digest, readonly: :true,
+        <%= f.text_area :digest, value: @digest, readonly: :true, required: true,
           class: "form-control" %><br/>
       <% end %>
 
@@ -24,7 +25,7 @@
       <%= f.text_field :verify, value: @verify, readonly: :true,
         class: "form-control" %><br/>
 
-      <%= f.submit "caculate", class: "btn btn-primary" %>
+      <%= f.submit "caculate", class: "btn btn-info center-block" %>
     <% end %>
   </div>
 </div>

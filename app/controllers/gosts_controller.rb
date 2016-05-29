@@ -8,7 +8,7 @@ class GostsController < ApplicationController
   end
 
   def show
-    p, q, a, b, x, y, d = check_size_degest
+    p, q, a, b, x, y, d = check_size_digest
     m = [@gost.message].pack("H*")
     gost341112 = Gost341112.new m, @gost.size
     @digest = gost341112.hexdigest
@@ -27,22 +27,12 @@ class GostsController < ApplicationController
     params.require(:gost).permit :message, :size
   end
 
-  def check_size_degest
+  def check_size_digest
     if @gost.size == 256
-      p = ENV["p1"]
-      q = ENV["q1"]
-      a = ENV["a1"]
-      b = ENV["b1"]
-      x = ENV["x1"]
-      y = ENV["y1"]
+      p, q, a, b, x, y  = ENV["p1"], ENV["q1"], ENV["a1"], ENV["b1"], ENV["x1"], ENV["y1"]
       d = ENV["private_key1"].to_i(16)
     else
-      p = ENV["p"]
-      q = ENV["q"]
-      a = ENV["a"]
-      b = ENV["b"]
-      x = ENV["x"]
-      y = ENV["y"]
+      p, q, a, b, x, y  = ENV["p"], ENV["q"], ENV["a"], ENV["b"], ENV["x"], ENV["y"]
       d = ENV["private_key"].to_i(16)
     end
     return p, q, a, b, x, y, d
