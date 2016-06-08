@@ -1,25 +1,36 @@
 class GostsController < ApplicationController
+  include GostsHelper
   before_action :load_gost, only: [:show, :update]
 
   def update
-    if @gost.update_attributes gost_params
+    if params[:commit] == "Signature"
+      @gost.update_attributes(check: "Signature")
+      if params[:gost][:file].present?
+        hash_file
+        sign @gost.hexdigest, @gost.size / 8
+      else
+        @gost.update_attributes gost_params
+        gost341112 = Gost341112.new @gost.message, @gost.size
+        @digest = gost341112.hexdigest
+        @gost.update_attributes(hexdigest: @digest)
+        sign @gost.hexdigest, @gost.size / 8
+      end
       redirect_to root_path
       flash[:success] = "Caculate signature success"
     else
+      @gost.update_attributes(check: "Verify", signature: params[:gost][:signature],
+        hexdigest: params[:gost][:digest])
       redirect_to root_path
-      flash[:danger] = "Caculate signature faile"
     end
   end
 
   def show
-    p, q, a, b, x, y, d = check_size_digest
-    m = [@gost.message].pack("H*")
-    gost341112 = Gost341112.new m, @gost.size
-    @digest = gost341112.hexdigest
-    curve = Gost341012.new p, q, a, b, x, y
-    @signature = curve.sign d, @digest, @gost.size / 8
-    pub = curve.public_key d
-    @verify = curve.verify pub[0], pub[1], @digest, @signature, @gost.size / 8
+    unless @gost.check == "Signature"
+      p, q, a, b, x, y, d = check_size_digest
+      curve = Gost341012.new p, q, a, b, x, y
+      pub = curve.public_key d
+      @verify = curve.verify pub[0], pub[1], @gost.hexdigest, [@gost.signature].pack("H*"), @gost.size / 8
+    end
   end
 
   private
@@ -40,5 +51,26 @@ class GostsController < ApplicationController
       d = ENV["private_key"].to_i(16)
     end
     return p, q, a, b, x, y, d
+  end
+
+  def sign digest, size
+    p, q, a, b, x, y, d = check_size_digest
+    curve = Gost341012.new p, q, a, b, x, y
+    signature = curve.sign d, digest, size
+    @gost.update_attributes(signature: encode_hex(signature))
+  end
+
+  def hash_file
+    @gost.update_attributes(file: params[:gost][:file])
+    gost = Gost341112.new "", params[:gost][:size]
+    File.open(@gost.file.current_path, "rb") do |f|
+      while true
+        buf = f.read(2**20)
+        break if not buf
+        gost.update buf
+      end
+    end
+    @gost.update_attributes(hexdigest: gost.hexdigest, message: "file_upload",
+      size: params[:gost][:size])
   end
 end

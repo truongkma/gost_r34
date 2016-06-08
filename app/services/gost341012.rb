@@ -57,7 +57,7 @@ class Gost341012
     raise "Invalid signature length" if sign.size != size * 2
     r = encode_hex(sign[0, size]).to_i(16)
     s = encode_hex(sign[size, size]).to_i(16)
-    return "false" if r <= 0 or r >= @q or s <= 0 or s >= @q
+    return "False" if r <= 0 or r >= @q or s <= 0 or s >= @q
     e = digest.to_i(16) % @q
     e = 1 if e == 0
     # e = 0x2DFBC1B372D89A1188C09C52E0EEC61FCE52032AB1022E8E67ECE6672B043EE5
@@ -68,20 +68,16 @@ class Gost341012
     p1x, p1y = exp(z1, p)
     q = [pubx, puby]
     q1x, q1y = exp(z2, q)
-    zp = [p1x, p1y]
-    zq = [q1x, q1y]
-    xc,yc = addEC(@a, @p, zp, zq)
-    r = xc % @q
-    # lm = q1x - p1x
-    # lm += @p if lm < 0
-    # lm = invert(lm, @p)
-    # z1 = q1y - p1y
-    # lm = lm * z1 % @p
-    # xc = lm * lm % @p
-    # xc = xc - p1x - q1x
-    # xc = xc % @p
-    # xc += @p if xc < 0
-    # xc %= @q
+    lm = q1x - p1x
+    lm += @p if lm < 0
+    lm = invert(lm, @p)
+    z1 = q1y - p1y
+    lm = lm * z1 % @p
+    xc = lm * lm % @p
+    xc = xc - p1x - q1x
+    xc = xc % @p
+    xc += @p if xc < 0
+    xc %= @q
     return "True" if xc == r
     return "False"
   end
