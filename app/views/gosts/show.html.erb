@@ -7,29 +7,32 @@
         <div class="col-md-6 col-md-offset-3">
           <%= form_for @gost do |f| %>
             <%= f.label :message, "Message M" %>
-            <%= f.text_field :message, class: "form-control", required: true,
-              autocomplete: :off %><br/>
+            <%= f.text_field :message, class: "form-control", autocomplete: :off %><br/>
 
             <%= f.label :size, "Digest size: " %>
             <%= f.select :size, [256, 512].collect{|n| n}, class: "selectpicker" %><br/>
+             <%= f.file_field :file %>
 
-            <% if @digest.present? %>
+            <% if @gost.hexdigest.present? %>
               <%= f.label :digest, "Hash value" %>
-              <%= f.text_area :digest, value: @digest, readonly: :true, required: true,
+              <%= f.text_area :digest, value: @gost.hexdigest, class: "form-control" %><br/>
+            <% end %>
+
+            <% if @gost.signature.present? %>
+              <%= f.label :signature, "Signature" %>
+              <%= f.text_area :signature, value: @gost.signature, class: "form-control" %><br/>
+            <% end %>
+
+            <% if @verify.present? %>
+              <%= f.label :verify, "Verify Signature" %>
+              <%= f.text_field :verify, value: @verify, readonly: :true,
                 class: "form-control" %><br/>
             <% end %>
 
-            <% if @signature.present? %>
-              <%= f.label :signature, "Signature" %>
-              <%= f.text_area :signature, value: encode_hex(@signature),
-                readonly: :true, class: "form-control" %><br/>
-            <% end %>
-
-            <%= f.label :verify, "Verify Signature" %>
-            <%= f.text_field :verify, value: @verify, readonly: :true,
-              class: "form-control" %><br/>
-
-            <%= f.submit "caculate", class: "btn btn-info center-block" %>
+            <div class="col-md-6">
+              <%= f.submit "Signature", class: "btn btn-info center-block" %>
+            </div>
+              <%= f.submit "Verify", class: "btn btn-info center-block" %>
           <% end %>
         </div>
       </div>

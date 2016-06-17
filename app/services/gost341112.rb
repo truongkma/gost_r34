@@ -13,6 +13,7 @@ class Gost341112
   end
 
   def digest
+    @data = [@data].pack("H*")
     if @digest_size == 256
       h = ["01"].pack("H*") * BLOCKSIZE
     else
