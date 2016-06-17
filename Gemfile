@@ -11,6 +11,8 @@ gem "jbuilder", "~> 2.0"
 gem "bootstrap-sass"
 gem "figaro"
 gem "carrierwave"
+gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw]
+gem 'coffee-script-source', '1.8.0'
 gem "sdoc", "~> 0.4.0", group: :doc
 
 group :development, :test do

@@ -11,7 +11,7 @@
 
             <%= f.label :size, "Digest size: " %>
             <%= f.select :size, [256, 512].collect{|n| n}, class: "selectpicker" %><br/>
-             <%= f.file_field :file %>
+            <%= f.file_field :file %>
 
             <% if @gost.hexdigest.present? %>
               <%= f.label :digest, "Hash value" %>

@@ -70,7 +70,7 @@ class GostsController < ApplicationController
         gost.update buf
       end
     end
-    @gost.update_attributes(hexdigest: gost.hexdigest, message: "file_upload",
+    @gost.update_attributes(hexdigest: gost.hexdigest, message: @gost.file.current_path,
       size: params[:gost][:size])
   end
 end
